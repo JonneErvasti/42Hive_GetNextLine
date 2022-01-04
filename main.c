@@ -6,7 +6,7 @@
 /*   By: jervasti <jonne.ervasti@student.hive.fi>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 14:23:47 by jervasti          #+#    #+#             */
-/*   Updated: 2022/01/04 23:07:16 by jervasti         ###   ########.fr       */
+/*   Updated: 2022/01/04 23:12:20 by jervasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	main(int ac, char **av)
 		ft_putchar('\n');
 		free(save);
 	}
-	
+	muutos
 	//muokkaa void niin että ottaa vastaan tiedostoja
 	//get_next_line(fd, line);
 	//get_next_line(fd, line);
