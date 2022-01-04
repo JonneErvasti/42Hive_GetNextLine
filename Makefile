@@ -6,8 +6,8 @@
 #    By: jervasti <jonne.ervasti@student.hive.fi>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/21 12:17:36 by jervasti          #+#    #+#              #
-#    Updated: 2021/12/21 12:18:20 by jervasti         ###   ########.fr        #
+#    Updated: 2022/01/03 20:42:26 by jervasti         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME: 
+COPY: 
