@@ -6,7 +6,7 @@
 /*   By: jervasti <jonne.ervasti@student.hive.fi>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 14:23:47 by jervasti          #+#    #+#             */
-/*   Updated: 2022/01/04 23:12:20 by jervasti         ###   ########.fr       */
+/*   Updated: 2022/01/04 23:13:22 by jervasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	main(int ac, char **av)
 	int	fd;
 	int		fd;
 	char	*save;
-
+											teksti
 	if (ac == 1)
 		printf("FEED ME THE FILE!");
 	fd = open(av[1], O_RDONLY);
