@@ -6,28 +6,57 @@
 /*   By: jervasti <jonne.ervasti@student.hive.fi>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 14:20:31 by jervasti          #+#    #+#             */
-/*   Updated: 2021/12/21 12:47:57 by jervasti         ###   ########.fr       */
+/*   Updated: 2022/01/07 23:51:27 by jervasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 /*
 ** Write a function that returns a line read from a file descriptor.
+**
+** The return value can be 1, 0 or -1 depending on whether
+**  1) a line has been read,
+**  0) when the reading has been completed,
+** -1) or if an error has happened respectively.
 */
 
-int	get_next_line(const int fd) /* add , char **line)*/
+
+int	get_next_line(const int fd, char **line)
 {
+	//static char	*filearray[FDSIZE];
 	char		buffer[BUFF_SIZE + 1];
-	//static char	*copy;
-	while (read(fd, &buffer, BUFF_SIZE))
-		write (1, &buffer, BUFF_SIZE);
+	//char 		*tmp;
+	int			reader;
+
+	if (!fd || fd < 0 || !line)
+		return (-1);
+	// TÄMÄ EI VIELÄ VÄLTTÄMÄTTÄ RIITÄ
+
+
+	reader = 1;
+	while (reader > 0)
+	{
+		reader = read(fd, &buffer, BUFF_SIZE);
+		printf("GNL:\treader: %d\n", reader);
+		printf("GNL:\tbuffer: %s\n", buffer);
+	}
+	/*
+	reader = read(fd, &buffer, BUFF_SIZE);
+	printf("GNL:\treader: %d\n", reader);
+	printf("GNL:\tbuffer: %s\n", buffer);
+	*/
+
+	//jos tallennuspaikassa ei ole mitään, aloita uusi
+	//muuten lisää tallennuspaikkaan
+
+	ft_memmove(*line, buffer, BUFF_SIZE + 1);
+	// TÄMÄ SIIRTÄÄ LOPULLISEEN SIJAINTIIN JA EI PITÄISI
+	// POINTTERIN PITÄÄ OSOSITTAA STATICCIIN
+
+
+
 	return (0);
-
-
-/*
-** The return value can be 1, 0 or -1 depending on whether a line has been read,
-**when the reading has been completed, or if an error has happened respectively.
-*/
 //if (malloc null, ..)
 //	return (-1);
 }
