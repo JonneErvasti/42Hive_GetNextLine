@@ -6,13 +6,13 @@
 /*   By: jervasti <jonne.ervasti@student.hive.fi>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 14:40:04 by jervasti          #+#    #+#             */
-/*   Updated: 2022/01/07 23:52:14 by jervasti         ###   ########.fr       */
+/*   Updated: 2022/01/08 16:11:37 by jervasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
-# define BUFF_SIZE 20
+# define BUFF_SIZE 32
 # define FDSIZE 4096
 
 # include <stdlib.h>
