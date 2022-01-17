@@ -6,7 +6,7 @@
 /*   By: jervasti <jonne.ervasti@student.hive.fi>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 14:20:31 by jervasti          #+#    #+#             */
-/*   Updated: 2022/01/08 18:55:09 by jervasti         ###   ########.fr       */
+/*   Updated: 2022/01/17 22:07:08 by jervasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,50 +21,77 @@
 ** -1) or if an error has happened respectively.
 */
 
+static void	strdestroyer(char **str)
+{
+	ft_strclr(*str);
+	free(*str);
+	*str = NULL;
+}
+
+static void	seek_and_destroy(char **str)
+{
+	char	*tmp;
+
+	tmp = *str;
+	*str = ft_strdup(tmp);
+	strdestroyer(&tmp);
+}
+
+static int	linecheck(char **line, char **bank)
+{
+	*bank = ft_strchr(*line, '\n');
+	if (*bank)
+	{
+		**bank = '\0';
+		*bank += 1;
+		if (**bank == '\0')
+			*bank = NULL;
+		else
+			*bank = ft_strdup(*bank);
+		return (1);
+	}
+	return (0);
+}
+
+static void	collect(char **line, char *buf)
+{
+	char	*tmp;
+
+	if (*line == NULL)
+		*line = ft_strdup(buf);
+	else
+	{
+		tmp = *line;
+		*line = ft_strjoin(tmp, buf);
+		strdestroyer(&tmp);
+	}
+}
 
 int	get_next_line(const int fd, char **line)
 {
-	static char	*savedpointers[FDSIZE];
+	static char	*pbank[FDSIZE];
 	char		buffer[BUFF_SIZE + 1];
-	//char 		*tmp;
-	int			reader;
+	ssize_t		readsize;
 
-	if (!fd || fd < 0 || !line || BUFF_SIZE <= 0)
+	if (read(fd, &buffer, 0) || fd < 0 || !line || BUFF_SIZE <= 0)
 		return (-1);
-	// TÄMÄ EI VIELÄ VÄLTTÄMÄTTÄ RIITÄ
-
-	reader = 1;
-	while (reader > 0)
+	*line = pbank[fd];
+	if (pbank[fd] != NULL && linecheck(line, &pbank[fd]))
+		return (1);
+	readsize = read(fd, &buffer, BUFF_SIZE);
+	while (readsize > 0)
 	{
-		reader = read(fd, &buffer, BUFF_SIZE);
-		buffer[BUFF_SIZE] = '\0';
-		if (savedpointers[fd] == NULL)
-			printf("\nHERE\n");
-		printf("GNL:\tbuffer: %s\n", buffer);
-		if (ft_strchr((char *)buffer, '\n'))
+		buffer[readsize] = '\0';
+		collect(line, buffer);
+		if (linecheck(line, &pbank[fd]))
 		{
-			printf("\nlöytyi\n");
-			break;
+			seek_and_destroy(line);
+			return (1);
 		}
+		readsize = read(fd, &buffer, BUFF_SIZE);
 	}
-	/*
-	reader = read(fd, &buffer, BUFF_SIZE);
-	printf("GNL:\treader: %d\n", reader);
-	printf("GNL:\tbuffer: %s\n", buffer);
-	*/
-
-	//jos tallennuspaikassa ei ole mitään, aloita uusi
-	//muuten lisää tallennuspaikkaan
-
-//	printf("\nBEFORE MEMMOVE\n");
-//	ft_memmove(*line, buffer, BUFF_SIZE + 1);
-//	printf("\nAFTER MEMMOVE\n");
-	// TÄMÄ SIIRTÄÄ LOPULLISEEN SIJAINTIIN JA EI PITÄISI
-	// POINTTERIN PITÄÄ OSOSITTAA STATICCIIN
-
-
-	// MUISTA LAITTAA TÄMÄ SIIHEN KOHTAAN KUN FILU ON LUETTU.
+	if (*line)
+		return (1);
+	strdestroyer(line);
 	return (0);
-//	JOS MALLOC NULL return (-1);
-// VAPAUTA MUISTI
 }
