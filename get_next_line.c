@@ -6,12 +6,11 @@
 /*   By: jervasti <jonne.ervasti@student.hive.fi>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 14:20:31 by jervasti          #+#    #+#             */
-/*   Updated: 2022/01/17 22:07:08 by jervasti         ###   ########.fr       */
+/*   Updated: 2022/01/20 09:07:10 by jervasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 /*
 ** Write a function that returns a line read from a file descriptor.
 **
@@ -39,6 +38,8 @@ static void	seek_and_destroy(char **str)
 
 static int	linecheck(char **line, char **bank)
 {
+	char	*tmp;
+
 	*bank = ft_strchr(*line, '\n');
 	if (*bank)
 	{
@@ -47,7 +48,11 @@ static int	linecheck(char **line, char **bank)
 		if (**bank == '\0')
 			*bank = NULL;
 		else
+		{
+			tmp = *bank;
 			*bank = ft_strdup(*bank);
+			ft_strclr(tmp);
+		}
 		return (1);
 	}
 	return (0);
@@ -69,17 +74,17 @@ static void	collect(char **line, char *buf)
 
 int	get_next_line(const int fd, char **line)
 {
-	static char	*pbank[FDSIZE];
+	static char	*pbank[FS + 1];
 	char		buffer[BUFF_SIZE + 1];
 	ssize_t		readsize;
 
-	if (read(fd, &buffer, 0) || fd < 0 || !line || BUFF_SIZE <= 0)
+	if (read(fd, &buffer, 0) || fd < 0 || fd > 10240 || !line || BUFF_SIZE <= 0)
 		return (-1);
 	*line = pbank[fd];
 	if (pbank[fd] != NULL && linecheck(line, &pbank[fd]))
 		return (1);
 	readsize = read(fd, &buffer, BUFF_SIZE);
-	while (readsize > 0)
+	while (/**line &&*/ readsize > 0)
 	{
 		buffer[readsize] = '\0';
 		collect(line, buffer);

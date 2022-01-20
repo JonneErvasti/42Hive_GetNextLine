@@ -6,7 +6,7 @@
 /*   By: jervasti <jonne.ervasti@student.hive.fi>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 14:23:47 by jervasti          #+#    #+#             */
-/*   Updated: 2022/01/17 13:52:42 by jervasti         ###   ########.fr       */
+/*   Updated: 2022/01/19 14:43:37 by jervasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int	main(int ac, char **av)
 	printf("Returned line in main: %s\n", line1);
 	printf("------------------------------");
 	printf("\n\n");
+	free(line1);
 	
 	rvalue = get_next_line(file2, &line2);
 	printf("\nINSIDE MAIN\n\n");
@@ -49,6 +50,7 @@ int	main(int ac, char **av)
 	printf("\nReturned line in main: %s\n", line2);
 	printf("------------------------------");
 	printf("\n\n\n");
+	free(line2);
 	
 	rvalue = get_next_line(file1, &line1);
 	printf("\nINSIDE MAIN\n\n");
@@ -56,6 +58,7 @@ int	main(int ac, char **av)
 	printf("Returned line in main: %s\n", line1);
 	printf("------------------------------");
 	printf("\n\n");
+	free(line1);
 	
 	rvalue = get_next_line(file1, &line1);
 	printf("\nINSIDE MAIN\n\n");
@@ -63,6 +66,7 @@ int	main(int ac, char **av)
 	printf("Returned line in main: %s\n", line1);
 	printf("------------------------------");
 	printf("\n\n");
+	free(line1);
 	
 	rvalue = get_next_line(file1, &line1);
 	printf("\nINSIDE MAIN\n\n");
@@ -70,6 +74,7 @@ int	main(int ac, char **av)
 	printf("Returned line in main: %s\n", line1);
 	printf("------------------------------");
 	printf("\n\n");
+	free(line1);
 
 	rvalue = 1;
 	while (rvalue == 1)
@@ -80,6 +85,7 @@ int	main(int ac, char **av)
 		printf("\nReturned line in main: %s\n", line2);
 		printf("------------------------------");
 		printf("\n\n\n");
+		free(line2);
 	}
 /*
 	rvalue = get_next_line(file2, &line2);
