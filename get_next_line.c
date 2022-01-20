@@ -6,7 +6,7 @@
 /*   By: jervasti <jonne.ervasti@student.hive.fi>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 14:20:31 by jervasti          #+#    #+#             */
-/*   Updated: 2022/01/20 09:07:10 by jervasti         ###   ########.fr       */
+/*   Updated: 2022/01/20 09:30:58 by jervasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,16 @@ static void	strdestroyer(char **str)
 	*str = NULL;
 }
 
-static void	seek_and_destroy(char **str)
+static int	seek_and_destroy(char **str)
 {
 	char	*tmp;
 
 	tmp = *str;
 	*str = ft_strdup(tmp);
 	strdestroyer(&tmp);
+	if (!*str)
+		return (-1);
+	return (1);
 }
 
 static int	linecheck(char **line, char **bank)
@@ -52,13 +55,15 @@ static int	linecheck(char **line, char **bank)
 			tmp = *bank;
 			*bank = ft_strdup(*bank);
 			ft_strclr(tmp);
+			if (!*bank)
+				return (-1);
 		}
 		return (1);
 	}
 	return (0);
 }
 
-static void	collect(char **line, char *buf)
+static int	collect(char **line, char *buf)
 {
 	char	*tmp;
 
@@ -70,6 +75,9 @@ static void	collect(char **line, char *buf)
 		*line = ft_strjoin(tmp, buf);
 		strdestroyer(&tmp);
 	}
+	if (!*line)
+		return (-1);
+	return (1);
 }
 
 int	get_next_line(const int fd, char **line)
@@ -84,15 +92,14 @@ int	get_next_line(const int fd, char **line)
 	if (pbank[fd] != NULL && linecheck(line, &pbank[fd]))
 		return (1);
 	readsize = read(fd, &buffer, BUFF_SIZE);
-	while (/**line &&*/ readsize > 0)
+	while (readsize > 0)
 	{
 		buffer[readsize] = '\0';
-		collect(line, buffer);
-		if (linecheck(line, &pbank[fd]))
-		{
-			seek_and_destroy(line);
+		if (collect(line, buffer) == 1 && linecheck(line, &pbank[fd]) == 1 \
+		&& seek_and_destroy(line) == 1)
 			return (1);
-		}
+		else if (!**line)
+			return (-1);
 		readsize = read(fd, &buffer, BUFF_SIZE);
 	}
 	if (*line)
