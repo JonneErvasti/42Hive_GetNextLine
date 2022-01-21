@@ -1,3 +1,0 @@
-These lines are very long. This particular line has precisely 80 chr in the line
-I am getting bored writing these so I just wich I was using lorem ipsum.
-This will be the last sentence beacause this is only for the first tests.

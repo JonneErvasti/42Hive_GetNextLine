@@ -6,7 +6,7 @@
 /*   By: jervasti <jonne.ervasti@student.hive.fi>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 14:20:31 by jervasti          #+#    #+#             */
-/*   Updated: 2022/01/20 09:30:58 by jervasti         ###   ########.fr       */
+/*   Updated: 2022/01/21 11:21:30 by jervasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,12 @@ static int	linecheck(char **line, char **bank)
 			if (!*bank)
 				return (-1);
 		}
-		return (1);
+		return (seek_and_destroy(line));
 	}
 	return (0);
 }
 
-static int	collect(char **line, char *buf)
+static int	collect(char **line, char *buf, char **bank)
 {
 	char	*tmp;
 
@@ -77,33 +77,34 @@ static int	collect(char **line, char *buf)
 	}
 	if (!*line)
 		return (-1);
-	return (1);
+	return (linecheck(line, bank));
 }
 
 int	get_next_line(const int fd, char **line)
 {
 	static char	*pbank[FS + 1];
 	char		buffer[BUFF_SIZE + 1];
-	ssize_t		readsize;
+	ssize_t		status;
 
-	if (read(fd, &buffer, 0) || fd < 0 || fd > 10240 || !line || BUFF_SIZE <= 0)
+	if (read(fd, &buffer, 0) || fd < 0 || fd > FS || !line || BUFF_SIZE <= 0)
 		return (-1);
 	*line = pbank[fd];
-	if (pbank[fd] != NULL && linecheck(line, &pbank[fd]))
-		return (1);
-	readsize = read(fd, &buffer, BUFF_SIZE);
-	while (readsize > 0)
+	if (pbank[fd] != NULL)
+		{
+		status = linecheck(line, &pbank[fd]);
+		if (status != 0)
+			return (status);
+		}
+	status = read(fd, &buffer, BUFF_SIZE);
+	while (status > 0)
 	{
-		buffer[readsize] = '\0';
-		if (collect(line, buffer) == 1 && linecheck(line, &pbank[fd]) == 1 \
-		&& seek_and_destroy(line) == 1)
-			return (1);
-		else if (!**line)
-			return (-1);
-		readsize = read(fd, &buffer, BUFF_SIZE);
+		buffer[status] = '\0';
+		status = collect(line, buffer, &pbank[fd]);
+		if (status != 0)
+			return (status);
+		status = read(fd, &buffer, BUFF_SIZE);
 	}
-	if (*line)
-		return (1);
-	strdestroyer(line);
-	return (0);
+	if (status == -1)
+		return (status);
+	return (!!*line);
 }
