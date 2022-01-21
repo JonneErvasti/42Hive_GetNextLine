@@ -6,7 +6,7 @@
 /*   By: jervasti <jonne.ervasti@student.hive.fi>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 14:20:31 by jervasti          #+#    #+#             */
-/*   Updated: 2022/01/21 11:21:30 by jervasti         ###   ########.fr       */
+/*   Updated: 2022/01/21 12:30:01 by jervasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,11 +90,11 @@ int	get_next_line(const int fd, char **line)
 		return (-1);
 	*line = pbank[fd];
 	if (pbank[fd] != NULL)
-		{
+	{
 		status = linecheck(line, &pbank[fd]);
 		if (status != 0)
 			return (status);
-		}
+	}
 	status = read(fd, &buffer, BUFF_SIZE);
 	while (status > 0)
 	{
