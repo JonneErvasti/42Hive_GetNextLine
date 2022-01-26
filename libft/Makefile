@@ -6,7 +6,7 @@
 #    By: jervasti <jervasti@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/05 16:04:20 by jervasti          #+#    #+#              #
-#    Updated: 2021/12/20 10:48:20 by jervasti         ###   ########.fr        #
+#    Updated: 2022/01/26 13:44:36 by jervasti         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,23 +69,26 @@ SRC = ft_putchar.c \
 		ft_memmove.c \
 		ft_memchr.c \
 
+OBJ = $(SRC:.c=.o)
+
 CC = gcc
 
 CFLAGS = -Wall -Wextra -Werror
 
-OBJ = $(SRC:.c=.o)
+$(NAME):
+	@echo Generating library...
+	@$(CC) $(CFLAGS) -c $(SRC)
+	@ar rcs $(NAME) $(OBJ) libft.h
+#	library, replace existing, create, generate index
+	@echo libft.a has been created!
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	ar rcs $(NAME) $(OBJ)
-#	library, replace existing, create, generate index
-
 clean:
-		rm -rf $(OBJ)
+		@rm -rf $(OBJ)
 
 fclean: clean
-		rm -rf $(NAME)
+		@rm -rf $(NAME)
 
 re: fclean all
 
@@ -96,6 +99,7 @@ copy: clean
 so:
 	$(CC) -nostartfiles -fPIC $(CFLAGS) $(SRC)
 	gcc -nostartfiles -shared -o libft.so $(OBJ)
+#this is for running a test program
 
 .PHONY: all clean fclean re
 #prevent files like 'all' to crash the makefile
